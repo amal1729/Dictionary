@@ -50,7 +50,7 @@ class BST:
                     counter +=1
             return counter
         except Exception:
-            self.filewrite('', 'w')
+            print("An exception occurred")
 
 if __name__ == '__main__':
     Tree = BST()
