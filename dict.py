@@ -39,6 +39,20 @@ class BST:
             return self.search(cn.lc, word)
         else:
             return self.search(cn.rc, word)
+    def printInorder(self,subString): 
+        return self.searchSubstring(self.root,subString,[])
+    def searchSubstring(self, cn, subString, wordList):
+        if cn:
+            if subString == cn.word[:len(subString)]:
+                self.searchSubstring(cn.lc, subString, wordList)
+                wordList.append(cn.word)
+                # print(cn.word)
+                self.searchSubstring(cn.rc,subString, wordList)
+            else:
+                self.searchSubstring(cn.lc, subString, wordList)
+                self.searchSubstring(cn.rc,subString, wordList)
+
+        return wordList
 
     def readInput(self,fileName):
         try:
@@ -72,3 +86,7 @@ if __name__ == '__main__':
                     subList.append(l[1])
         for s in subList:
             f.write('\n---------------------------------------------------\n---------------- Sub String:'+s+'------------------------\n')
+            wordList = Tree.printInorder(s)
+            if wordList:
+                f.write( ','.join( wordList ) )
+        f.close()
