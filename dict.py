@@ -1,9 +1,12 @@
+#238_A1_PS14_EngDictionary
+#Node for each data
 class Node:
     def __init__(self, word, meaning):
         self.lc = None
         self.rc = None
         self.word = word
         self.meaning = meaning
+#Operations
 class BST:
     def __init__(self):
         self.root = None
@@ -39,19 +42,16 @@ class BST:
             return self.search(cn.lc, word)
         else:
             return self.search(cn.rc, word)
-    def printInorder(self,subString): 
+
+    def searchInorder(self,subString): 
         return self.searchSubstring(self.root,subString,[])
+
     def searchSubstring(self, cn, subString, wordList):
         if cn:
+            self.searchSubstring(cn.lc, subString, wordList)
             if subString == cn.word[:len(subString)]:
-                self.searchSubstring(cn.lc, subString, wordList)
                 wordList.append(cn.word)
-                # print(cn.word)
-                self.searchSubstring(cn.rc,subString, wordList)
-            else:
-                self.searchSubstring(cn.lc, subString, wordList)
-                self.searchSubstring(cn.rc,subString, wordList)
-
+            self.searchSubstring(cn.rc,subString, wordList)
         return wordList
 
     def readInput(self,fileName):
@@ -64,29 +64,32 @@ class BST:
                     counter +=1
             return counter
         except Exception:
-            print("An exception occurred")
+            print("An exception occurred while reading input")
 
 if __name__ == '__main__':
     Tree = BST()
     subList = []
     counter = Tree.readInput('ArraydictPS14.txt')
     with open('outputPS14.txt', 'w') as f:
-        f.write('-----------Reading from file ArraydictPS14.txt -------------\nBST Created with '+str(counter)+' nodes')
-        f.write('\n---------------------------------------------------\n---------------- Search words ------------------------\n')
-        with open('promoptsPS14.txt') as p:
-            for l in p:
-                l=l.strip().split(': ')
-                if l[0] == 'SearchWord':
-                    sr= Tree.find(l[1])
-                    if sr:
-                        f.write(sr.word + '-' + sr.meaning)
-                    else:
-                        f.write(str(l[1]) + '- not found')
-                elif l[0] == 'SubString':
-                    subList.append(l[1])
-        for s in subList:
-            f.write('\n---------------------------------------------------\n---------------- Sub String:'+s+'------------------------\n')
-            wordList = Tree.printInorder(s)
-            if wordList:
-                f.write( ','.join( wordList ) )
-        f.close()
+        if counter:
+                f.write('-----------Reading from file ArraydictPS14.txt -------------\nBST Created with '+str(counter)+' nodes')
+                f.write('\n---------------------------------------------------\n---------------- Search words ------------------------\n')
+                with open('promoptsPS14.txt') as p:
+                    for l in p:
+                        l=l.strip().split(': ')
+                        if l[0] == 'SearchWord':
+                            sr= Tree.find(l[1])
+                            if sr:
+                                f.write(sr.word + '-' + sr.meaning)
+                            else:
+                                f.write(str(l[1]) + '- not found')
+                        elif l[0] == 'SubString':
+                            subList.append(l[1])
+                for s in subList:
+                    f.write('\n---------------------------------------------------\n---------------- Sub String:'+s+'------------------------\n')
+                    wordList = Tree.searchInorder(s)
+                    if wordList:
+                        f.write( ','.join( wordList ) )  
+        else :
+            f.write('-----------No input available -------------')
+    f.close()
